@@ -1,3 +1,23 @@
+export type PnlBreakdown = Record<string, string | number | null>
+
+export type PnlResponse = {
+  summary?: {
+    revenue?: number | null
+    totalCosts?: number | null
+    netProfit?: number | null
+    profitMargin?: number | null
+    [key: string]: number | string | null | undefined
+  }
+  revenue?: number | null
+  totalCosts?: number | null
+  netProfit?: number | null
+  profitMargin?: number | null
+  dailyTrend?: Array<Record<string, string | number | null>>
+  channelBreakdown?: PnlBreakdown[]
+  productBreakdown?: PnlBreakdown[]
+  [key: string]: unknown
+}
+
 export type Filters = {
   startDate?: string
   endDate?: string
@@ -37,7 +57,7 @@ export const api = {
   getHealth: () => request<{ status: string }>('/health'),
   getOrders: (filters: Filters = {}) => request('/api/orders' + queryString(filters)),
   getDashboard: (filters: Filters = {}) => request('/api/dashboard' + queryString(filters)),
-  getPnl: (filters: Filters = {}) => request('/api/pnl' + queryString(filters)),
+  getPnl: (filters: Filters = {}) => request<PnlResponse>('/api/pnl' + queryString(filters)),
   getProducts: (filters: Filters = {}) => request('/api/products' + queryString(filters)),
   getChannels: (filters: Filters = {}) => request('/api/channels' + queryString(filters)),
   getDataSource: () => request<{ source: 'csv' | 'mongodb' | 'metabase' }>('/api/data-source'),
